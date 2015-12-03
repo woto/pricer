@@ -1,0 +1,19 @@
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">
+
+      <%= simple_form_for @search, url: search_path do |f| %>
+        <%= f.input :catalog_number %>
+        <%= f.button :submit %>
+      <% end %>
+
+      <br />
+
+      <% @results.each do |result| %>
+        <%= debug result %>
+        <br />
+      <% end if @results %>
+
+    </div>
+  </div>
+</div>
