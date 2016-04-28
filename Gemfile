@@ -48,6 +48,7 @@ group :development do
   gem 'spring'
 end
 
+gem 'dotenv'
 gem 'puma'
 gem 'carrierwave'
 gem 'simple_form'
@@ -61,6 +62,12 @@ gem 'charlock_holmes'#, github: 'brianmario/charlock_holmes'
 gem 'ruby-filemagic'
 gem 'bootstrap-sass'
 gem 'actioncable', github: 'rails/actioncable'
+gem 'rack-cors', :require => 'rack/cors'
+gem 'sidekiq'
+gem 'sinatra', :require => nil
+gem 'yajl-ruby', require: 'yajl'
+gem 'array_stats'
+gem 'dotenv-rails'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-jquery-ui'

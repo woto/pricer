@@ -9,21 +9,47 @@
       <table class="table">
         <thead>
           <tr>
+            <th>ID</th>
+            <th>Supplier</th>
             <th>Title</th>
+            <th>Comment</th>
             <th>Count</th>
             <th>Imported at</th>
-            <th colspan="5"></th>
+            <th>Upload</th>
+            <th colspan="4"></th>
           </tr>
         </thead>
 
         <tbody>
           <% @prices.each do |price| %>
             <tr>
-              <td><%= price.title %></td>
-              <td><%= $redis.scard("price:#{price.id}") %></td>
+              <td><%= price.id %></td>
+              <td>
+                <b><%= link_to price.supplier.try(:title), price.supplier %></b><br />
+                <%= link_to price.supplier.try(:site), price.supplier.try(:site) %><br />
+                <%= link_to price.supplier.try(:address), "https://maps.yandex.ru/213/moscow/?text=#{price.supplier.try(:address)}&sll=37.620393%2C55.753960&sspn=1.189270%2C0.442221" %><br />
+                <%= price.supplier.try(:notes) %><br />
+                <%= price.supplier.try(:manager_name) %><br />
+                <%= price.supplier.try(:manager_phone) %><br />
+                <%= price.supplier.try(:manager_email) %><br />
+                username: <%= price.supplier.try(:username) %><br />
+                password: <%= price.supplier.try(:password) %><br />
+              </td>
+              <td>
+                <b><%= link_to price.title, list_price_path(price)%></b> <br />
+                <%= link_to 'Cheap', cheap_price_path(price, format: :txt), rel: 'nofollow' %> <br />
+                <%= link_to 'Download', download_price_path(price, format: :json), rel: 'nofollow' %> <br />
+              </td>
+              <td><%= price.comment %></td>
+              <td><%= $redis.scard("p:#{price.id}") %></td>
               <td><%= price.imported_at %></td>
-              <td><%= link_to 'Cleanup', cleanup_price_path(price), method: :post %></td>
-              <td><%= link_to 'List', list_price_path(price) %></td>
+              <td>
+                <% if price.upload %>
+                  <%= link_to root_upload(price.upload).original_filename, upload_path(root_upload(price.upload)) %> &gt;
+                  <%= link_to price.upload.upload.original_filename, upload_path(price.upload.upload) %>
+                <% end %>
+              </td>
+              <td><%= link_to 'Cleanup', cleanup_price_path(price), method: :post, data: { confirm: 'Are you sure?' } %></td>
               <td><%= link_to 'Show', price %></td>
               <td><%= link_to 'Edit', edit_price_path(price) %></td>
               <td><%= link_to 'Destroy', price, method: :delete, data: { confirm: 'Are you sure?' } %></td>

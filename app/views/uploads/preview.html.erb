@@ -15,7 +15,7 @@
         <%= f.error_notification %>
 
         <%= f.input :price_id, 
-          collection: ([Price.new] + Price.all).map{|price| [price.title, price.id, data: {attributes: price.attributes.merge(url: Time.now)}]},
+          collection: ([Price.new] + Price.order(:title)).map{|price| [price.title, price.id, data: {attributes: price.attributes.merge(url: Time.now)}]},
           input_html: {class: 'input-lg'},
           include_blank: false
         %>

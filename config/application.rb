@@ -22,5 +22,22 @@ module Pricer
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+
+    config.action_dispatch.default_headers = {
+      "Access-Control-Allow-Origin" => "*",
+      "Access-Control-Request-Method" => "*",
+      "Access-Control-Allow-Methods" => "POST, PUT, DELETE, GET, OPTIONS",
+      "Access-Control-Allow-Headers" => "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+      "Access-Control-Max-Age" => "1728000",
+      "X-Frame-Options" => "http://www.avtorif.ru"
+    }
+
+    config.middleware.insert_before 0, "Rack::Cors" do
+      allow do
+        origins '*'
+        resource '*', :headers => :any, :methods => [:get, :post, :options]
+      end
+    end
+
   end
 end

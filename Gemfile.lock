@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/rails/actioncable.git
-  revision: 6be2604aa719713c602b8a873337d328196f8f57
+  revision: 92adbc2fab09445cd29022e1ac19bd65e66e9760
   specs:
     actioncable (0.0.3)
       actionpack (>= 4.2.0)
@@ -66,6 +66,7 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     arel (6.0.3)
+    array_stats (0.6.0)
     autoprefixer-rails (6.1.0.1)
       execjs
       json
@@ -92,7 +93,8 @@ GEM
     coffee-script (2.4.1)
       coffee-script-source
       execjs
-    coffee-script-source (1.9.1.1)
+    coffee-script-source (1.10.0)
+    connection_pool (2.2.0)
     debug_inspector (0.0.2)
     devise (3.5.1)
       bcrypt (~> 3.0)
@@ -101,13 +103,16 @@ GEM
       responders
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
+    dotenv (1.0.2)
+    dotenv-rails (1.0.2)
+      dotenv (= 1.0.2)
     em-hiredis (0.3.0)
       eventmachine (~> 1.0)
       hiredis (~> 0.5.0)
     erubis (2.7.0)
     eventmachine (1.0.8)
     execjs (2.6.0)
-    faye-websocket (0.10.1)
+    faye-websocket (0.10.2)
       eventmachine (>= 0.12.0)
       websocket-driver (>= 0.5.1)
     globalid (0.3.6)
@@ -132,11 +137,11 @@ GEM
       mime-types (>= 1.16, < 3)
     method_source (0.8.2)
     mime-types (2.6.2)
-    mini_portile (0.6.2)
-    minitest (5.8.2)
+    mini_portile2 (2.0.0)
+    minitest (5.8.3)
     multi_json (1.11.2)
-    nokogiri (1.6.6.2)
-      mini_portile (~> 0.6.0)
+    nokogiri (1.6.7)
+      mini_portile2 (~> 2.0.0.rc2)
     orm_adapter (0.5.0)
     polyamorous (1.2.0)
       activerecord (>= 3.0)
@@ -149,6 +154,9 @@ GEM
     puma (2.11.3)
       rack (>= 1.1, < 2.0)
     rack (1.6.4)
+    rack-cors (0.4.0)
+    rack-protection (1.5.3)
+      rack
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.2.4)
@@ -197,7 +205,9 @@ GEM
       polyamorous (~> 1.2)
     rdoc (4.2.0)
       json (~> 1.4)
-    redis (3.2.1)
+    redis (3.2.2)
+    redis-namespace (1.5.2)
+      redis (~> 3.0, >= 3.0.4)
     responders (2.1.0)
       railties (>= 4.2.0, < 5)
     ruby-filemagic (0.7.1)
@@ -211,9 +221,19 @@ GEM
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
+    sidekiq (3.3.3)
+      celluloid (>= 0.16.0)
+      connection_pool (>= 2.1.1)
+      json
+      redis (>= 3.0.6)
+      redis-namespace (>= 1.3.1)
     simple_form (3.1.0)
       actionpack (~> 4.0)
       activemodel (~> 4.0)
+    sinatra (1.4.6)
+      rack (~> 1.4)
+      rack-protection (~> 1.4)
+      tilt (>= 1.3, < 3)
     slop (3.6.0)
     spring (1.4.0)
     sprockets (3.4.0)
@@ -245,12 +265,14 @@ GEM
     websocket-driver (0.6.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
+    yajl-ruby (1.2.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   actioncable!
+  array_stats
   bootstrap-sass
   byebug
   carrierwave
@@ -258,12 +280,15 @@ DEPENDENCIES
   ckpages!
   coffee-rails (~> 4.1.0)
   devise
+  dotenv
+  dotenv-rails
   hiredis
   jbuilder (~> 2.0)
   jquery-rails
   pry
   pry-nav
   puma
+  rack-cors
   rails (= 4.2.4)
   rails-assets-floatThead!
   rails-assets-jquery-file-upload!
@@ -272,12 +297,15 @@ DEPENDENCIES
   ruby-filemagic
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
+  sidekiq
   simple_form
+  sinatra
   spring
   sqlite3
   turbolinks
   uglifier (>= 1.3.0)
   web-console (~> 2.0)
+  yajl-ruby
 
 BUNDLED WITH
    1.10.6

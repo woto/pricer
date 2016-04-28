@@ -1,5 +1,5 @@
 class EncodeJob < ActiveJob::Base
-  queue_as :default
+  queue_as :pricer
 
   def perform(upload)
 

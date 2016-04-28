@@ -1,9 +1,16 @@
 Rails.application.routes.draw do
 
+  resources :suppliers
   resources :prices do
     member do
       get :list
       post :cleanup
+      scope :format => true, :constraints => { :format => 'txt' } do
+        get :cheap
+      end
+      scope :format => true, :constraints => { :format => 'json' } do
+        get :download
+      end
     end
   end
 
@@ -22,7 +29,13 @@ Rails.application.routes.draw do
 
   match "/websocket", :to => ActionCable.server, via: [:get, :post]
 
+  # old route
+  get '/user/products/new', to: "search#show"
+
 	root 'welcome#index'
+
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

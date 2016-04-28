@@ -4,6 +4,12 @@
 
       <p id="notice"><%= notice %></p>
 
+      <% begin %>
+      <% upload = Upload.find(params[:id]).upload %>
+      <%= link_to upload.id, upload %>
+      <% rescue %>
+      <% end %>
+
       <h1>Listing Uploads</h1>
 
       <table class="table table-striped">

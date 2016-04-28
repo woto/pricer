@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151129192522) do
+ActiveRecord::Schema.define(version: 20151221040316) do
 
   create_table "prices", force: :cascade do |t|
     t.string   "title"
@@ -119,9 +119,38 @@ ActiveRecord::Schema.define(version: 20151129192522) do
     t.string   "field_99"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.integer  "upload_id"
+    t.string   "def_c"
+    t.string   "def_b"
+    t.string   "def_n"
+    t.string   "def_p"
+    t.string   "def_d"
+    t.string   "def_q"
+    t.string   "def_01"
+    t.string   "def_02"
+    t.string   "def_03"
+    t.string   "def_04"
+    t.string   "def_05"
+    t.string   "def_06"
+    t.string   "def_07"
+    t.string   "def_c0"
+    t.string   "def_c1"
+    t.string   "def_c2"
+    t.string   "def_c3"
+    t.string   "def_c4"
+    t.string   "def_c5"
+    t.string   "def_c6"
+    t.string   "def_c7"
+    t.string   "def_c8"
+    t.string   "def_c9"
+    t.string   "def_r"
+    t.string   "def_l"
+    t.string   "def_t"
+    t.string   "comment"
   end
 
   add_index "prices", ["supplier_id"], name: "index_prices_on_supplier_id"
+  add_index "prices", ["upload_id"], name: "index_prices_on_upload_id"
 
   create_table "searches", force: :cascade do |t|
     t.datetime "created_at", null: false

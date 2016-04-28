@@ -4,9 +4,16 @@ class SearchController < ApplicationController
     @search = SearchForm.new(catalog_number: params[:catalog_number])
     
     @results = []
-    offer_ids = $redis.smembers("catalog_number:#{ProcessCommon.normalize_catalog_number(@search.catalog_number)}")
-    offer_ids.each do |offer_id|
-      @results << $redis.hgetall(offer_id)
+    offers_ids = $redis.smembers("c:#{ProcessCommon.normalize_catalog_number(@search.catalog_number)}")
+    offers_ids.each do |offer_id|
+      result = $redis.hgetall(offer_id)
+      price = Price.find(result['r'].to_i)
+      unless price.hide
+        result['m'] = price.comment
+        result['t'] = price.imported_at
+        result['z'] = price.title
+        @results << result
+      end
     end
 
     respond_to do |format|

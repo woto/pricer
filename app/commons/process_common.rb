@@ -1,21 +1,18 @@
 require 'open3'
+require 'csv'
+
 
 class ProcessCommon
   class << self
 
     def perform(upload)
-      case upload.content_type
-        when /zip|7z|rar/
-          if File.extname(upload.original_filename) == '.xlsx'
-            ExcelJob.perform_later(upload)
-          else
-            UnpackJob.perform_later(upload)
-          end
-        when *['application/cdfv2-corrupt', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 
-               'application/vnd.ms-excel', 'application/vnd.ms-office']
-          ExcelJob.perform_later(upload)
-        when *['text/plain', 'text/csv', 'text/x-python', 'application/octet-stream']
-          EncodeJob.perform_later(upload)
+      case File.extname(upload.original_filename)
+      when *['.zip', '.7z', '.rar']
+        UnpackJob.perform_later(upload)
+      when *['.xls', '.xlsx', '.xlsm']
+        ExcelJob.perform_later(upload)
+      else #when *['.txt', '.csv']
+        EncodeJob.perform_later(upload)
       end
     end
 
@@ -27,17 +24,26 @@ class ProcessCommon
       end
     end
 
+    def normalize_brand(brand)
+      @brands_synonyms ||= CSV.read("file.csv").
+        map(&:reverse).to_h
+      @brands_synonyms[brand.upcase] || brand.upcase
+    end
+
     def normalize_catalog_number(catalog_number)
       catalog_number.to_s.upcase.gsub(/[^А-ЯA-Z0-9]/i, '')
     end
 
+    def normalize_cost(cost)
+      cost.gsub(/[^\d\.,]/,'').gsub(',','.').to_i
+    end
+
     def cleanup_price(price)
       # Получаем список всех предложений прайса
-      while (offer_id = $redis.spop("price:#{price.id}"))
+      while (offer_id = $redis.spop("p:#{price.id}"))
         # Получаем каталожный номер из предложения
-        if catalog_number = $redis.hget(offer_id, :catalog_number)
-          # Удаляем из сводного списка каталожных номеров предложение
-          $redis.srem("catalog_number:#{catalog_number}", offer_id)
+        if (catalog_number = $redis.hget(offer_id, :c)).present?
+          $redis.srem("c:#{catalog_number}", offer_id)
         end
         # Удаляем само предложение
         $redis.del(offer_id)

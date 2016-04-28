@@ -1,5 +1,5 @@
 class ExcelJob < ActiveJob::Base
-  queue_as :default
+  queue_as :pricer
 
   def perform(upload)
     uploads = []
@@ -11,7 +11,12 @@ class ExcelJob < ActiveJob::Base
           notes = sheet_name
           path = File.join(tempdir, sheet_name)
           command = "j #{upload.price.file.path} -s '#{sheet_name}' -o '#{path}'"
-          ProcessCommon.popen3(command)
+          begin
+            ProcessCommon.popen3(command)
+          rescue StandardError
+            command = "in2csv '#{upload.price.file.path}' > '#{path}'"
+            ProcessCommon.popen3(command)
+          end
           uploads << Upload.create!(price: File.open(path), upload: upload, job_type: :excel, notes: notes,
                                     command: command)
         end
